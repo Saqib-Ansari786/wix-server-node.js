@@ -4,10 +4,9 @@ import { createProduct, deleteProduct, getProduct, queryProducts, updateProduct 
 
 const wixProductsRouter = express.Router();
 
-wixProductsRouter.route("/getProducts").get(queryProducts);
-wixProductsRouter.route("/createProduct").post(createProduct);
-wixProductsRouter.route("/updateProduct/:id").put(updateProduct);
-wixProductsRouter.route("/deleteProduct/:id").delete(deleteProduct);
-wixProductsRouter.route("/getProduct/:id").get(getProduct);
+wixProductsRouter.route("/products").get(queryProducts);
+wixProductsRouter.route("/product").post(createProduct);
+wixProductsRouter.route("/product/:id").put(updateProduct).delete(deleteProduct).get(getProduct);
+
 
 export default wixProductsRouter;
