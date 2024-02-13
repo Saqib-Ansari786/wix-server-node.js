@@ -7,7 +7,7 @@ dotenv.config();
 
 const clientID = process.env.WIX_CLIENT_ID;
 const clientSecret = process.env.WIX_CLIENT_SECRET;
-const redirectURI = "http://localhost:4000/api/v1/auth/redirect-url";
+const redirectURI = "http://localhost:4000/auth/v1/redirect-url";
 
 export const wixGetCode = catchAsyncError(async (req, res, next) => {
   const wixAuthUrl = `https://www.wix.com/installer/install?token=${req.query.token}&appId=${clientID}&redirectUrl=${redirectURI}`;

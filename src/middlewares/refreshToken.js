@@ -1,5 +1,4 @@
 import axios from "axios";
-import catchAsyncError from "./catchAsyncError.js";
 import WixToken from "../models/wixToken.js";
 import dotenv from "dotenv";
 dotenv.config();
@@ -28,8 +27,6 @@ export const wixRefreshToken = async () => {
     );
 
     const { access_token, refresh_token } = response.data;
-    console.log(access_token, "------------------------i m in refresh token");
-
     return {
       access_token,
       refresh_token,
