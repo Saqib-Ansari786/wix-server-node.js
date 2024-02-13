@@ -10,11 +10,20 @@ process.on("uncaughtException", (error) => {
 
 // all imports goes here
 import app from "./app.js";
-import dbConnect from "./src/utils/dbConnect.js";
+import WixToken from "./src/models/wixToken.js";
+import sequelize from "./src/utils/dbConnect.js";
 import printStatement from "./src/utils/printStatement.js";
 
 // connecting to database
-dbConnect();
+sequelize
+  .sync()
+  .then(() => {
+    printStatement("Database Connected Successfully");
+  })
+  .catch((error) => {
+    printStatement(`Error: ${error.message}`, "Database Connection Failed");
+  });
+
 
 // starting server
 const server = app.listen(process.env.PORT, () => {

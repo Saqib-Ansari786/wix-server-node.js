@@ -1,6 +1,8 @@
 import axios from "axios";
 import catchAsyncError from "../middlewares/catchAsyncError.js";
 import dotenv from "dotenv";
+import WixToken from "../models/wixToken.js";
+import printStatement from "../utils/printStatement.js";
 dotenv.config();
 
 const clientID = process.env.WIX_CLIENT_ID;
@@ -15,7 +17,7 @@ export const wixGetCode = catchAsyncError(async (req, res, next) => {
 export const wixgetToken = catchAsyncError(async (req, res, next) => {
   const { code } = req.query;
   const response = await axios.post(
-    "https://www.wix.com/oauth/access",
+    "https://www.wixapis.com/oauth/access",
     {
       client_id: clientID,
       client_secret: clientSecret,
@@ -28,30 +30,22 @@ export const wixgetToken = catchAsyncError(async (req, res, next) => {
       },
     }
   );
-  console.log(response.data);
+  const { access_token, refresh_token } = response.data;
+  const token = await WixToken.findOne({ where: { id: 2 } });
+  if (token){
+    if (token.token !== refresh_token) {
+      await token.update({ token: refresh_token });
+    }else{
+      printStatement("Token is same as previous token");
+    }
+  }
+  else{
+    await WixToken.create({ token: refresh_token });
+  }
+
+  printStatement("Token saved successfully");
+ 
   res.redirect(
     `https://www.wix.com/installer/token-received?token=${response.data.access_token}`
   );
-});
-
-export const wixRefreshToken = catchAsyncError(async (req, res, next) => {
-  const { refreshToken } = req.query;
-  const response = await axios.post(
-    "https://www.wix.com/oauth/access",
-    {
-      client_id: clientID,
-      client_secret: clientSecret,
-      grant_type: "refresh_token",
-      refresh_token: refreshToken,
-    },
-    {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    }
-  );
-  res.status(200).json({
-    success: true,
-    data: response.data,
-  });
 });

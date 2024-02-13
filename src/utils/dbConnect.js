@@ -1,10 +1,4 @@
-import mongoose from "mongoose";
-import printStatement from "./printStatement.js";
+import { Sequelize } from "sequelize";
 
-const dbConnect = async () => {
-  await mongoose.connect(process.env.DB_URL).then(() => {
-    printStatement("DB Connected");
-  });
-};
-
-export default dbConnect;
+const sequelize = new Sequelize({ dialect: "mysql", host: "localhost", port: 3306, username: "root", password: "", database: "wix-database" });
+export default sequelize;

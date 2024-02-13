@@ -5,6 +5,7 @@ import passportStrategy from "./src/middlewares/passportStrategy.js";
 import passport from "passport";
 import cookieParser from "cookie-parser";
 import wixOauthRouter from "./src/routers/wixOauthRouter.js";
+import wixProductsRouter from "./src/routers/wixProducts.js";
 
 // configuration for .env variables
 dotenv.config();
@@ -22,6 +23,7 @@ app.use(passport.initialize());
 // all routes of the app
 // app.use(`/api/v1`, userRouter);
 app.use("/api/v1/auth", wixOauthRouter);
+app.use("/api/v1",wixProductsRouter );
 app.get("/", (req, res) => {
   res.send("Server is Running");
 });
