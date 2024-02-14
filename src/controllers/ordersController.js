@@ -5,7 +5,7 @@ import { wixRefreshToken } from "../middlewares/refreshToken.js";
 const wixBaseUrl = "https://www.wixapis.com/ecom/v1/orders";
 
 export const wixGetOrders = catchAsyncError(async (req, res, next) => {
-  const { access_token } = await wixRefreshToken();
+  const  access_token  = req.access_token;
 try {
     const { data } = await axios.post(`${wixBaseUrl}/search`,{search:{}}, { headers: { authorization: access_token } });
     res.status(200).json({

@@ -1,13 +1,13 @@
 import axios from "axios";
 import WixToken from "../models/wixToken.js";
 import dotenv from "dotenv";
+import catchAsyncError from "./catchAsyncError.js";
 dotenv.config();
 
-export const wixRefreshToken = async () => {
-  const refreshToken = await WixToken.findOne({ where: { id: 2 } });
-
+export const wixRefreshToken = catchAsyncError  (async (req, res, next) => {
+  const refreshToken = await WixToken.findAll();
   if (!refreshToken) {
-    return Promise.reject(new Error("No refresh token found"));
+    return next(new Error("No refresh token found"));
   }
 
   try {
@@ -17,7 +17,7 @@ export const wixRefreshToken = async () => {
         client_id: process.env.WIX_CLIENT_ID,
         client_secret: process.env.WIX_CLIENT_SECRET,
         grant_type: "refresh_token",
-        refresh_token: refreshToken.token,
+        refresh_token: refreshToken[0].token,
       },
       {
         headers: {
@@ -26,12 +26,13 @@ export const wixRefreshToken = async () => {
       }
     );
 
-    const { access_token, refresh_token } = response.data;
-    return {
-      access_token,
-      refresh_token,
-    };
+    const { access_token } = response.data;
+    req.access_token = access_token;
+    next();
+    
   } catch (error) {
-    return Promise.reject(new Error("Error while refreshing token"));
+    return next(new Error("Error while refreshing token"));
   }
-};
+});
+
+ 

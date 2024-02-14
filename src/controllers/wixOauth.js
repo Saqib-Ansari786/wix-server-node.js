@@ -31,10 +31,10 @@ export const wixgetToken = catchAsyncError(async (req, res, next) => {
     }
   );
   const { access_token, refresh_token } = response.data;
-  const token = await WixToken.findOne({ where: { id: 2 } });
-  if (token){
-    if (token.token !== refresh_token) {
-      await token.update({ token: refresh_token });
+  const token = await WixToken.findAll()
+  if (token.length === 1){
+    if (token[0].token !== refresh_token) {
+      await token[0].update({ token: refresh_token });
     }else{
       printStatement("Token is same as previous token");
     }

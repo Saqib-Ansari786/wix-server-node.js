@@ -24,6 +24,10 @@ const errorMiddleware = (err, req, res, next) => {
       break;
     default:
       break;
+      case "ValidationError":
+        const validationErrorMessage = Object.values(err.errors).map((value) => value.message);
+        err = new ErrorHandler(400, validationErrorMessage);
+        break;
   }
   res.status(err.statusCode).json({
     success: false,
