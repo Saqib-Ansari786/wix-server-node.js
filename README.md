@@ -27,3 +27,8 @@ This is wix Integration with Node.js. This is a simple server that will serve th
 - [x] Clone the repository.
 - [x] Run `yarn install` or `npm install` to install the dependencies.
 - [x] Run `yarn run dev` or `npm run dev` to start the server.
+- [x] add .env file and add the following variables:
+  - PORT=4000
+  - SERVER_URL = "http://localhost:4000"
+  - WIX_CLIENT_ID=
+  - WIX_CLIENT_SECRET=
